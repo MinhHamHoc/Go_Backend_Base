@@ -4,9 +4,7 @@
 
 3. Create the "main.go" file in root, this will server as the project/webs-server entry point
 
-4. Create the "Makefile" this will contain some basic commands to run the project
-
-5. Create these folders:
+4. Create these folders:
     1. Controllers: contains controller that accepts a request and call particular service to process
 
     2. Services: contains services that has the logic for doing all process like manipulating DB and give back the desired result
@@ -20,6 +18,4 @@
 
     6. Config: Keep all your configuration things here like, fetching variable from .env file, or even DB config can be place here
 
-    7. Constant: Keep all constant here, can also categories them in separate file
-
-    8. Ultilities: Keep commonly used function here like capitalising first letter, etc
+    7. Ultilities: Keep commonly used function here like capitalising first letter, etc

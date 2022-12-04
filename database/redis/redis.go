@@ -2,56 +2,57 @@ package redis
 
 import (
 	"context"
-	"errors"
+	"fmt"
 
 	"github.com/go-redis/redis/v8"
 )
 
-type RedisClient struct {
-	Client *redis.Client
-}
+var redisClient *redis.Client
 
-var (
-	ErrNil = errors.New("no matching record found in redis database")
-	Ctx    = context.TODO()
-)
+var AddressUrl = "localhost:6379"
 
-func NewRedis(address string) (*RedisClient, error) {
+func connectRedis(ctx context.Context) {
 	client := redis.NewClient(&redis.Options{
-		Addr:     address,
+		Addr:     AddressUrl,
 		Password: "",
 		DB:       0,
 	})
-	if err := client.Ping(Ctx).Err(); err != nil {
-		return nil, err
+
+	pong, err := client.Ping(ctx).Result()
+	if err != nil {
+		fmt.Println(err)
 	}
-	return &RedisClient{
-		Client: client,
-	}, nil
+	fmt.Println(pong)
+
+	redisClient = client
 }
 
-func (r *RedisClient) HSet(key, value string) error {
-	return r.Client.HSet(Ctx, key, value).Err()
-}
-
-func (r *RedisClient) HDel(key string, fields ...string) error {
-	return r.Client.HDel(Ctx, key, fields...).Err()
-}
-
-func (r *RedisClient) HGetAll(key string) (map[string]string, error) {
-	cmd := r.Client.HGetAll(Ctx, key)
-	if err := cmd.Err(); err != nil {
-		return map[string]string{}, err
+func HSet(ctx context.Context, key, val string) {
+	err := redisClient.Set(ctx, key, val, 0).Err()
+	if err != nil {
+		fmt.Println(err)
 	}
-
-	return cmd.Val(), nil
 }
 
-func (r *RedisClient) HGet(key, field string) (string, error) {
-	cmd := r.Client.HGet(Ctx, key, field)
-	if err := cmd.Err(); err != nil {
-		return "", err
+func HGet(ctx context.Context, key string) string {
+	val, err := redisClient.Get(ctx, key).Result()
+	if err != nil {
+		fmt.Println(err)
 	}
 
-	return cmd.Val(), nil
+	return val
+}
+
+func HGetAll(ctx context.Context, key string) []string {
+	keys := []string{}
+
+	iter := redisClient.Scan(ctx, 0, key, 0).Iterator()
+	for iter.Next(ctx) {
+		keys = append(keys, iter.Val())
+	}
+	if err := iter.Err(); err != nil {
+		panic(err)
+	}
+
+	return keys
 }

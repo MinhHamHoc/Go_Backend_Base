@@ -3,7 +3,7 @@ package user
 import (
 	"backendbase/database/repository"
 	"backendbase/models"
-	provider "backendbase/ultilities/providers"
+	provi "backendbase/ultilities/providers"
 	"fmt"
 	"strconv"
 
@@ -12,8 +12,8 @@ import (
 )
 
 type AddUser struct {
-	FirstName   string `bson:"firstname" json:"firstname"`
-	LastName    string `bson:"lastname" json:"lastname"`
+	FirstName   string `bson:"first_name" json:"first_name"`
+	LastName    string `bson:"last_name" json:"last_name"`
 	PhoneNumber string `bson:"phoneNumber" json:"phoneNumber"`
 	Email       string `bson:"email" json:"email"`
 	Gender      string `bson:"gender" json:"gender"`
@@ -21,7 +21,7 @@ type AddUser struct {
 }
 
 func (a *AddUser) Valid() error {
-	if a.PhoneNumber != "" && !provider.IsPhoneNumber(a.PhoneNumber) {
+	if a.PhoneNumber != "" && !provi.IsPhoneNumber(a.PhoneNumber) {
 		return fmt.Errorf("invalid phone number")
 	}
 	_, err := govalidator.ValidateStruct(a)
@@ -49,8 +49,7 @@ func (h *AddUserHandler) Handle(a *AddUser) (string, error) {
 		LastName:    a.LastName,
 		PhoneNumber: a.PhoneNumber,
 		Gender:      genderInt,
-
-		Age: a.Age,
+		Age:         a.Age,
 		// CreatedTime: ultilities.TimeInUTC(time.Now()),
 		// UpdatedTime: ultilities.TimeInUTC(time.Now()),
 	}

@@ -79,6 +79,11 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	}
+	http.SetCookie(w, &http.Cookie{
+		Name:    "token",
+		Value:   token,
+		Expires: time.Now().Add(time.Minute * 5),
+	})
 	if err := h.AccessIDRepository.Set(account.Email, claims.Id, fmt.Sprintf("%d", claims.ExpiresAt)); err != nil {
 		fmt.Println(err)
 		WriteJSON(w, http.StatusInternalServerError, ResponseBody{
@@ -94,4 +99,15 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 			"token": token,
 		},
 	})
+}
+func (h *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
+	ckie := &http.Cookie{
+		Name:    "token",
+		Value:   "",
+		Path:    "/",
+		Expires: time.Unix(0, 0),
+
+		HttpOnly: true,
+	}
+	http.SetCookie(w, ckie)
 }

@@ -43,7 +43,7 @@ func (h *UserHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 	end := query.Get("end")
 	limit := query.Get("limit")
 	page := query.Get("page")
-	Users, err := h.UserRepository.All()
+	Users, err := h.UserRepository.AllUser()
 	if err != nil {
 		WriteJSON(w, HTTP_ERROR_CODE_READ_FAILED, ResponseBody{
 			Message: "unable to get User from server",
@@ -64,7 +64,7 @@ func (h *UserHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 
 func (h *UserHandler) GetByID(w http.ResponseWriter, r *http.Request) {
 	id, _ := utilities.GetQuery(r, "id")
-	User, err := h.UserRepository.GetByID(id)
+	User, err := h.UserRepository.FindUserByID(id)
 	if err != nil {
 		WriteJSON(w, HTTP_ERROR_CODE_READ_FAILED, ResponseBody{
 			Message: "unable to get User by id : " + id,
@@ -81,7 +81,7 @@ func (h *UserHandler) UpdateByID(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 		return
 	}
-	if err := h.UserRepository.UpdateByID(id, updateContact); err != nil {
+	if err := h.UserRepository.UpdateUserByID(id, updateContact); err != nil {
 		WriteJSON(w, HTTP_ERROR_CODE_UPDATE_FAILED, ResponseBody{
 			Message: err,
 			Code:    HTTP_ERROR_CODE_UPDATE_FAILED,
@@ -96,7 +96,7 @@ func (h *UserHandler) UpdateByID(w http.ResponseWriter, r *http.Request) {
 
 func (h *UserHandler) DeleteByID(w http.ResponseWriter, r *http.Request) {
 	id, _ := utilities.GetQuery(r, "id")
-	if err := h.UserRepository.DeleteByID(id); err != nil {
+	if err := h.UserRepository.RemoveUserByID(id); err != nil {
 		WriteJSON(w, HTTP_ERROR_CODE_DELETE_FAILED, ResponseBody{
 			Message: err,
 			Code:    HTTP_ERROR_CODE_DELETE_FAILED,

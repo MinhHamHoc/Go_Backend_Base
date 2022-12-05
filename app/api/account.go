@@ -1,6 +1,7 @@
 package api
 
 import (
+	"backendbase/database/repository"
 	utilities "backendbase/ultilities"
 	"fmt"
 	"net/http"
@@ -37,7 +38,7 @@ func (h *AccountHandler) Add(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *AccountHandler) GetAll(w http.ResponseWriter, r *http.Request) {
-	accounts, err := h.AccountRepository.All()
+	accounts, err := h.AccountRepository.AllAccount()
 	if err != nil {
 		WriteJSON(w, HTTP_ERROR_CODE_READ_FAILED, ResponseBody{
 			Message: "unable to get account from server",
@@ -50,7 +51,7 @@ func (h *AccountHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 
 func (h *AccountHandler) GetByID(w http.ResponseWriter, r *http.Request) {
 	id, _ := utilities.GetQuery(r, "id")
-	account, err := h.AccountRepository.GetByID(id)
+	account, err := h.AccountRepository.FindAccountByIDByID(id)
 	if err != nil {
 		WriteJSON(w, HTTP_ERROR_CODE_READ_FAILED, ResponseBody{
 			Message: "unable to get account by id : " + id,
@@ -67,7 +68,7 @@ func (h *AccountHandler) UpdateByID(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 		return
 	}
-	if err := h.AccountRepository.UpdateByID(id, updateContact); err != nil {
+	if err := h.AccountRepository.UpdateAccountByID(id, updateContact); err != nil {
 		WriteJSON(w, HTTP_ERROR_CODE_UPDATE_FAILED, ResponseBody{
 			Message: err,
 			Code:    HTTP_ERROR_CODE_UPDATE_FAILED,
@@ -82,7 +83,7 @@ func (h *AccountHandler) UpdateByID(w http.ResponseWriter, r *http.Request) {
 
 func (h *AccountHandler) DeleteByID(w http.ResponseWriter, r *http.Request) {
 	id, _ := utilities.GetQuery(r, "id")
-	if err := h.AccountRepository.DeleteByID(id); err != nil {
+	if err := h.AccountRepository.RemoveAccountByIDByID(id); err != nil {
 		WriteJSON(w, HTTP_ERROR_CODE_DELETE_FAILED, ResponseBody{
 			Message: err,
 			Code:    HTTP_ERROR_CODE_DELETE_FAILED,

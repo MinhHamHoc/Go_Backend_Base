@@ -2,7 +2,6 @@ package mongo
 
 import (
 	"backendbase/models"
-	"context"
 	"fmt"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -10,10 +9,11 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
-var userCollection *mongo.Collection = GetCollection(Database, "user")
-var Ctx = context.TODO()
+const userMongoCollection = "user"
 
-func All() ([]models.User, error) {
+var userCollection *mongo.Collection = GetCollection(Database, userMongoCollection)
+
+func AllUser() ([]models.User, error) {
 	var user models.User
 	var users []models.User
 
@@ -34,7 +34,7 @@ func All() ([]models.User, error) {
 	return users, err
 }
 
-func FindByID(id string) (models.User, error) {
+func FindUserByID(id string) (models.User, error) {
 	var user models.User
 	objectId, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
@@ -48,7 +48,7 @@ func FindByID(id string) (models.User, error) {
 	return user, nil
 }
 
-func Save(user models.User) error {
+func SaveUser(user models.User) error {
 	_, err := userCollection.InsertOne(Ctx, user)
 	if err != nil {
 		return err
@@ -56,7 +56,7 @@ func Save(user models.User) error {
 	return nil
 }
 
-func UpdateByID(id string, user models.User) error {
+func UpdateUserByID(id string, user models.User) error {
 	if !bson.IsObjectIdHex(id) {
 		return fmt.Errorf("invalid id")
 	}
@@ -81,7 +81,7 @@ func UpdateByID(id string, user models.User) error {
 	return nil
 }
 
-func RemoveByID(id string) error {
+func RemoveUserByID(id string) error {
 	_, err := userCollection.DeleteOne(Ctx, bson.D{{"_id", id}})
 	if err != nil {
 		return err

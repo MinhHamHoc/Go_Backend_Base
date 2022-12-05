@@ -5,9 +5,9 @@ import (
 )
 
 type UserRepository interface {
-	All() ([]models.User, error)
-	FindByID(id string) (*models.User, error)
-	Save(user models.User) error
-	UpdateByID(id string, user models.User) error
-	RemoveByID(id string) error
+	AllUser() ([]models.User, error)
+	FindUserByID(id string) (*models.User, error)
+	SaveUser(user models.User) error
+	UpdateUserByID(id string, user models.User) error
+	RemoveUserByID(id string) error
 }

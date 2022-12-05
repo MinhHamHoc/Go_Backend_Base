@@ -10,6 +10,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+var Ctx = context.TODO()
+
 func ConnectDB() *mongo.Client {
 	host := "127.0.0.1"
 	port := "27017"

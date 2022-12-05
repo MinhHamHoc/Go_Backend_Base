@@ -28,8 +28,8 @@ func (h *AuthHandler) makeClaims(account models.Account) Claims {
 	return Claims{
 		StandardClaims: jwt.StandardClaims{
 			Id:        bson.NewObjectId().Hex(),
-			Aud:       account.id,
-			Mail:      account.email,
+			Audience:  string(account.ID),
+			Subject:   account.Email,
 			ExpiresAt: time.Now().AddDate(10, 0, 0).Unix(),
 			IssuedAt:  time.Now().Unix(),
 		},

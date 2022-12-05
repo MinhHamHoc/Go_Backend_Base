@@ -10,4 +10,5 @@ type AccountRepository interface {
 	SaveAccount(user models.User) error
 	UpdateAccountByID(id string, user models.User) error
 	RemoveAccountByIDByID(id string) error
+	FindAccountByEmail(email string) (models.Account, error)
 }

@@ -48,6 +48,15 @@ func FindAccountByID(id string) (models.Account, error) {
 	return account, nil
 }
 
+func FindAccountByEmail(email string) (models.Account, error) {
+	var account models.Account
+	err := accountCollection.FindOne(Ctx, bson.D{{"email", email}}).Decode(&account)
+	if err != nil {
+		return account, err
+	}
+	return account, nil
+}
+
 func UpdateAccountByID(id string, account models.Account) error {
 	if !bson.IsObjectIdHex(id) {
 		return fmt.Errorf("invalid id")

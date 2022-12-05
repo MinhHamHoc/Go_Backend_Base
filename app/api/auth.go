@@ -1,6 +1,7 @@
 package api
 
 import (
+	"backendbase/models"
 	"fmt"
 	"net/http"
 	"time"
@@ -23,7 +24,7 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-func (h *AuthHandler) makeClaims(account model.account) Claims {
+func (h *AuthHandler) makeClaims(account models.Account) Claims {
 	return Claims{
 		StandardClaims: jwt.StandardClaims{
 			Id:        bson.NewObjectId().Hex(),

@@ -11,7 +11,7 @@ var redisClient *redis.Client
 
 var AddressUrl = "localhost:6379"
 
-func connectRedis(ctx context.Context) {
+func ConnectRedis(ctx context.Context) {
 	client := redis.NewClient(&redis.Options{
 		Addr:     AddressUrl,
 		Password: "",

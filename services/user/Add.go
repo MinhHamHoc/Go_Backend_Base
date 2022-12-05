@@ -12,11 +12,12 @@ import (
 )
 
 type AddUser struct {
-	FirstName   string `bson:"firstname"json:"firstname"`
-	LastName    string `bson:"lastname"json:"lastname"`
-	PhoneNumber string `bson:"phoneNumber"json:"phoneNumber"`
-	Email       string `bson:"email"json:"email"`
-	Gender      string `bson:"gender"json:"gender"`
+	FirstName   string `bson:"firstname" json:"firstname"`
+	LastName    string `bson:"lastname" json:"lastname"`
+	PhoneNumber string `bson:"phoneNumber" json:"phoneNumber"`
+	Email       string `bson:"email" json:"email"`
+	Gender      string `bson:"gender" json:"gender"`
+	Age         int    `bson:"age" json:"age"`
 }
 
 func (a *AddUser) Valid() error {
@@ -48,10 +49,10 @@ func (h *AddUserHandler) Handle(a *AddUser) (string, error) {
 		LastName:    a.LastName,
 		PhoneNumber: a.PhoneNumber,
 		Gender:      genderInt,
-		// UserID:      a.ID.Hex(),
-		// Age:         models.User,
-		// CreatedTime: provider.TimeInUTC(time.Now()),
-		// UpdatedTime: provider.TimeInUTC(time.Now()),
+
+		Age: a.Age,
+		// CreatedTime: ultilities.TimeInUTC(time.Now()),
+		// UpdatedTime: ultilities.TimeInUTC(time.Now()),
 	}
 	return u.ID.Hex(), h.UserRepository.Save(u)
 }
